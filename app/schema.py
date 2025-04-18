@@ -9,3 +9,18 @@ class Register(BaseModel):
     phone2:int
     password:str
     role: Optional[str] = "user"
+
+class TokenData(BaseModel):
+    id : Optional[str] = None
+
+class ProductManage(BaseModel):
+    name : str
+    price : int
+    quantity : int
+
+class Cart(BaseModel):
+    user_id : int
+    product_id : int
+    quantity : Optional[int] = 1
+
+

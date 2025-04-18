@@ -1,23 +1,69 @@
-<!-- app/templates/cart.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Your Cart</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f8f9fa; /* off-white */
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #0a1f44; /* navy blue */
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        #cart-items {
+            max-width: 600px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        #cart-items p {
+            margin: 6px 0;
+        }
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 30px;
+            background-color: #c9a227; /* gold */
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #b8931e;
+        }
+        hr {
+            border: 0;
+            height: 1px;
+            background-color: #ddd;
+            margin: 15px 0;
+        }
+    </style>
 </head>
 <body>
-    <h1>Your Cart</h1>
+    <header>
+        <h1>Your Cart</h1>
+    </header>
     <div id="cart-items"></div>
     <button onclick="goToCheckout()">Proceed to Checkout</button>
 
     <script>
-
-        
         async function loadCart() {
             const token = localStorage.getItem("access_token");
             const res = await fetch("/cart", {
-                headers: { "Authorization": `Bearer ${token}`,
-                            "Content-Type": "application/json" }
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
             });
 
             if (!res.ok) {
@@ -41,43 +87,24 @@
             });
         }
 
-        async function checkout() {
+        async function goToCheckout() {
             const token = localStorage.getItem("access_token");
-            const res = await fetch("/cart/checkout", {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${token}`,
-                            "Content-Type": "application/json"
-                }
+
+            if (!token) {
+                alert("Login required.");
+                return;
+            }
+
+            const res = await fetch("/cart", {
+                headers: { "Authorization": `Bearer ${token}` }
             });
 
             if (res.ok) {
-                alert("Checkout successful!");
-                window.location.reload();
+                window.location.href = "/checkouts";
             } else {
-                const err = await res.json();
-                alert("Checkout failed: " + err.detail);
+                alert("You are not authorized. Please log in again.");
             }
         }
-        async function goToCheckout() {
-        const token = localStorage.getItem("access_token");
-
-        if (!token) {
-            alert("Login required.");
-            return;
-        }
-
-        // Try hitting a protected endpoint to validate the token
-        const res = await fetch("/cart", {
-            headers: { "Authorization": `Bearer ${token}` }
-        });
-
-        if (res.ok) {
-            window.location.href = "/checkouts";
-        } else {
-            alert("You are not authorized. Please log in again.");
-        }
-    }
 
         loadCart();
     </script>

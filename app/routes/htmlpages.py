@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from ..database import get_db
 from ..oauth2 import get_current_user
 from ..models import Product
+import datetime
 
 router = APIRouter(tags=["html"])
 
@@ -31,3 +32,9 @@ def get_cart_page(request: Request):
 @router.get("/checkouts", response_class=HTMLResponse)
 def get_checkout_page(request: Request):
     return templates.TemplateResponse("checkout.html", {"request": request})
+
+@router.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse("home.html", {
+        "request": request,
+        "year": datetime.datetime.now().year})

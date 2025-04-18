@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BAUHINIA Clothing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #111;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 28px;
+            letter-spacing: 1px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #ff4081;
+        }
+
+        .hero {
+            background-image: url("https://images.unsplash.com/photo-1560243563-062bfc001d68?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+            background-size: cover;
+            background-position: center;
+            height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .hero h2 {
+            font-size: 48px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px 40px;
+            border-radius: 10px;
+        }
+
+        .content {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .content h3 {
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #222;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>BAUHINIA</h1>
+        <nav>
+            <a href="/registers">Register</a>
+            <a href="/logins">Login</a>
+            <a href="/products">Products</a>
+            <a href="/carts">Cart</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h2>Your Elegant clothing Style with BAUHINIA</h2>
+    </section>
+
+    <section class="content">
+        <h3>Discover Our Collection</h3>
+        <p>From elegant casualwear to sophisticated statements, BAUHINIA is your go-to destination for timeless fashion. Shop the latest trends crafted with quality and care.</p>
+    </section>
+
+    <footer>
+        &copy; {{ year }} BAUHINIA Clothing Co. All rights reserved.
+        made by Ashen viduranga Fernando for Esoft HND Assignment Application Development
+    </footer>
+</body>
+</html>

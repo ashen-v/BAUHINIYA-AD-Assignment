@@ -3,40 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <title>Checkout</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #0a1f44;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h3 {
+            color: #0a1f44;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="radio"] {
+            margin-right: 8px;
+        }
+        button {
+            padding: 12px 30px;
+            background-color: #c9a227;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #b8931e;
+        }
+    </style>
 </head>
 <body>
-    <h1>Checkout</h1>
+    <header>
+        <h1>Checkout</h1>
+    </header>
 
-    <div id="order-summary"></div>
+    <div class="container">
+        <div id="order-summary"></div>
 
-    <form id="checkout-form">
-        <label>Delivery Address:</label><br>
-        <textarea id="address" rows="3" cols="40" required></textarea>
+        <form id="checkout-form">
+            <label for="address"><strong>Delivery Address:</strong></label><br>
+            <textarea id="address" rows="3" required></textarea>
 
-        <label>Payment Method:</label><br>
-        <input type="radio" id="cod" name="payment" value="cod" checked>
-        <label for="cod">Cash on Delivery</label><br><br>
+            <label><strong>Payment Method:</strong></label><br>
+            <input type="radio" id="cod" name="payment" value="cod" checked>
+            <label for="cod">Cash on Delivery</label><br><br>
 
-        <button type="submit">Confirm Order</button>
-    </form>
+            <button type="submit">Confirm Order</button>
+        </form>
+    </div>
 
     <script>
-    async function loadUserInfo() {
-        const token = localStorage.getItem("access_token");
+        async function loadUserInfo() {
+            const token = localStorage.getItem("access_token");
 
-    const res = await fetch("/me", {
-        headers: {
-            "Authorization": `Bearer ${token}`
+            const res = await fetch("/me", {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+
+            if (res.ok) {
+                const user = await res.json();
+                document.getElementById("address").value = user.address;
+            } else {
+                alert("Failed to load user info. Please login again.");
+            }
         }
-    });
 
-    if (res.ok) {
-        const user = await res.json();
-        document.getElementById("address").value = user.address;
-    } else {
-        alert("Failed to load user info. Please login again.");
-    }
-    }
         let total = 0;
 
         async function loadSummary() {
@@ -94,4 +146,5 @@
     </script>
 </body>
 </html>
+
 

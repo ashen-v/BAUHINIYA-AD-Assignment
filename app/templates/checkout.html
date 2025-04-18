@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout</title>
+</head>
+<body>
+    <h1>Checkout</h1>
+
+    <div id="order-summary"></div>
+
+    <form id="checkout-form">
+        <label>Delivery Address:</label><br>
+        <textarea id="address" rows="3" cols="40" required></textarea>
+
+        <label>Payment Method:</label><br>
+        <input type="radio" id="cod" name="payment" value="cod" checked>
+        <label for="cod">Cash on Delivery</label><br><br>
+
+        <button type="submit">Confirm Order</button>
+    </form>
+
+    <script>
+    async function loadUserInfo() {
+        const token = localStorage.getItem("access_token");
+
+    const res = await fetch("/me", {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+
+    if (res.ok) {
+        const user = await res.json();
+        document.getElementById("address").value = user.address;
+    } else {
+        alert("Failed to load user info. Please login again.");
+    }
+    }
+        let total = 0;
+
+        async function loadSummary() {
+            const token = localStorage.getItem("access_token");
+            const res = await fetch("/cart", {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+
+            if (!res.ok) {
+                alert("Failed to load summary");
+                return;
+            }
+
+            const items = await res.json();
+            const summary = document.getElementById("order-summary");
+            summary.innerHTML = "<h3>Order Summary:</h3>";
+
+            items.forEach(item => {
+                summary.innerHTML += `
+                    <p>${item.product.name} - Rs. ${item.product.price} x ${item.quantity}</p>
+                `;
+                total += item.product.price * item.quantity;
+            });
+
+            summary.innerHTML += `<p><strong>Total: Rs. ${total}</strong></p>`;
+        }
+
+        document.getElementById("checkout-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const token = localStorage.getItem("access_token");
+
+            const res = await fetch("/cart/checkout", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    address: document.getElementById("address").value,
+                    payment_method: "Cash on Delivery"
+                })
+            });
+
+            if (res.ok) {
+                alert("Order confirmed!");
+                window.location.href = "/products";
+            } else {
+                const err = await res.json();
+                alert("Failed to checkout: " + err.detail);
+            }
+        });
+
+        loadSummary();
+        loadUserInfo();
+    </script>
+</body>
+</html>
+

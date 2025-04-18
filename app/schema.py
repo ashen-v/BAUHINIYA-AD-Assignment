@@ -19,7 +19,7 @@ class ProductManage(BaseModel):
     quantity : int
 
 class Cart(BaseModel):
-    user_id : int
+    user_id : Optional [int] = None
     product_id : int
     quantity : Optional[int] = 1
 

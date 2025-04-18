@@ -30,7 +30,7 @@ def verify_acess_token(token: str, credentials_exception):
 
         if id is None:
             raise credentials_exception
-        token_data = TokenData(id = id)
+        token_data = TokenData(id = str(id))
     
     except JWTError:
         raise credentials_exception
@@ -42,7 +42,7 @@ def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         detail="Could not validate credentials", headers={"WWW-Authenticate": "Bearer"})
     
     token_id = verify_acess_token(token, credentials_exception)
-    user = db.query(User).filter(User.user_id == int(token_id.id)).first()
+    user = db.query(User).filter(User.id == int(token_id.id)).first()
     
     if user is None:
         raise credentials_exception

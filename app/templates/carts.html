@@ -1,0 +1,85 @@
+<!-- app/templates/cart.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Cart</title>
+</head>
+<body>
+    <h1>Your Cart</h1>
+    <div id="cart-items"></div>
+    <button onclick="goToCheckout()">Proceed to Checkout</button>
+
+    <script>
+
+        
+        async function loadCart() {
+            const token = localStorage.getItem("access_token");
+            const res = await fetch("/cart", {
+                headers: { "Authorization": `Bearer ${token}`,
+                            "Content-Type": "application/json" }
+            });
+
+            if (!res.ok) {
+                alert("Error loading cart");
+                return;
+            }
+
+            const items = await res.json();
+            const container = document.getElementById("cart-items");
+            container.innerHTML = "";
+
+            items.forEach(item => {
+                const div = document.createElement("div");
+                div.innerHTML = `
+                    <p><strong>${item.product.name}</strong></p>
+                    <p>Price: Rs. ${item.product.price}</p>
+                    <p>Quantity: ${item.quantity}</p>
+                    <hr>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        async function checkout() {
+            const token = localStorage.getItem("access_token");
+            const res = await fetch("/cart/checkout", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                            "Content-Type": "application/json"
+                }
+            });
+
+            if (res.ok) {
+                alert("Checkout successful!");
+                window.location.reload();
+            } else {
+                const err = await res.json();
+                alert("Checkout failed: " + err.detail);
+            }
+        }
+        async function goToCheckout() {
+        const token = localStorage.getItem("access_token");
+
+        if (!token) {
+            alert("Login required.");
+            return;
+        }
+
+        // Try hitting a protected endpoint to validate the token
+        const res = await fetch("/cart", {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        if (res.ok) {
+            window.location.href = "/checkouts";
+        } else {
+            alert("You are not authorized. Please log in again.");
+        }
+    }
+
+        loadCart();
+    </script>
+</body>
+</html>

@@ -23,4 +23,9 @@ class Cart(BaseModel):
     product_id : int
     quantity : Optional[int] = 1
 
+class Total_data(BaseModel):
+    total_stock : int
+    total_products : int
+    total_users : int
+
 

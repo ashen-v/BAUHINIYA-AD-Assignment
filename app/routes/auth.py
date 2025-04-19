@@ -29,4 +29,3 @@ def login(user_cred: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 @router.get("/me")
 def read_users_me(user: User = Depends(get_current_user)):
     return user
-    # return {"id": user.id, "username": user.username, "email": user.email, "address": user.address}

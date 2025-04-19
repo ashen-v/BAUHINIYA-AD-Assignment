@@ -38,3 +38,7 @@ def home(request: Request):
     return templates.TemplateResponse("home.html", {
         "request": request,
         "year": datetime.datetime.now().year})
+
+@router.get("/dashboard", response_class=HTMLResponse)
+def get_checkout_page(request: Request):
+    return templates.TemplateResponse("dashboard.html", {"request": request})
